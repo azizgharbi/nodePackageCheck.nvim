@@ -13,9 +13,8 @@
 
 # Usage
 
-- For the moment the plugin will return the latest verison of `Typescript` by running `require("npmPackageManager")`:
-
-- `I know so useless, but the work is in progress`.
+- Currently, the plugin is in a work in progress state and it retrieves the latest version of Typescript by executing `require("npmPackageManager")`.
+  While this feature may not be particularly useful at this stage, it is being developed further.
 
 # Contributing
 
