@@ -1,2 +1,4 @@
 # npmPackageManager.nvim
-The idea is to get latest packages version found package.json inside a Neovim editor buffer.
+
+- Show the version list of the `available/latest` version of any package inside `package.json`.
+- work in progress.
