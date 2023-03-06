@@ -12,7 +12,7 @@
 - Work in progress : You still can manually install the plugin.
 - git clone this repository:
 
-### Packer:
+#### Packer
 
 - `use("PACKAGE_PATH")`
 
