@@ -4,12 +4,17 @@
 
 ### Example
 
-- Show the latest verion of any packages.
-- Check if some package are outdated.
+- Show the latest verion of any package from `registry.npmjs`.
+- Check if packages are outdated inside `package.json`.
 
 # Installation
 
-- Work in progress
+- Work in progress : You still can manually install the plugin.
+- git clone this repository:
+
+### Packer:
+
+- `use("PACKAGE_PATH")`
 
 # Usage
 
