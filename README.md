@@ -13,8 +13,9 @@
 
 # Usage
 
-- Currently, the plugin is in a work in progress state and it retrieves the latest version of Typescript by executing `require("nodePackageCheck")`.
-  While this feature may not be particularly useful at this stage, it is being developed further.
+- Currently, the plugin is in a work in progress state.
+- Get the package latest version: `:NodePackageCheck [package name]`.
+- While this feature may not be particularly useful at this stage, it is being developed further.
 
 # Contributing
 
