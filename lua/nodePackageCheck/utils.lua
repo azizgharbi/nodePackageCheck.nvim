@@ -24,7 +24,7 @@ utils.getPackageLatestVersion = function(packageName)
 		handle:close()
 		-- check if the package exist
 		if string.find(response, "Not Found") then
-			return response
+			return "Package not Found"
 		else
 			return get_property(response, "version")
 		end
