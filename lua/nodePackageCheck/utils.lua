@@ -1,12 +1,20 @@
+-- ]]
+-- Function get_property: Get value from a property name
+--]]
 local function get_property(json_string, property_name)
 	local start_index = string.find(json_string, '"' .. property_name .. '":')
 		+ string.len('"' .. property_name .. '":')
 	local end_index = string.find(json_string, ",", start_index) - 1
 	return string.sub(json_string, start_index, end_index)
 end
+-- End
+--]]
 
 local utils = {}
 
+--]]
+-- Check the last version from package name calling registry.npmjs
+--]]
 utils.getPackageLatestVersion = function(packageName)
 	local url = "https://registry.npmjs.org/" .. packageName .. "/latest"
 	local handle = io.popen("curl -s '" .. url .. "'")
@@ -22,5 +30,7 @@ utils.getPackageLatestVersion = function(packageName)
 		end
 	end
 end
+-- End
+-- ]]
 
 return utils
