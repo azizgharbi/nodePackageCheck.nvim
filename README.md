@@ -1,6 +1,6 @@
-# npmPackageManager for Neovim
+# nodePackageCheck for Neovim
 
-- A plugin for Neovim that allows you to manage your npm packages from within Neovim.
+- A plugin for Neovim that allows you to check updates and versions of your npm packages from within Neovim.
 
 ### Example
 
@@ -13,7 +13,7 @@
 
 # Usage
 
-- Currently, the plugin is in a work in progress state and it retrieves the latest version of Typescript by executing `require("npmPackageManager")`.
+- Currently, the plugin is in a work in progress state and it retrieves the latest version of Typescript by executing `require("nodePackageCheck")`.
   While this feature may not be particularly useful at this stage, it is being developed further.
 
 # Contributing
