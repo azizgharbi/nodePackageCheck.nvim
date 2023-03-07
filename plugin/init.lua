@@ -10,7 +10,7 @@ add_user_commands("NodePackageCheck", function(opts)
 		print("Error: Please provide a package name")
 		return
 	end
-	print(npc.utils.getPackageLatestVersion(opts.args))
+	print(npc.utils.get_package_latest_version(opts.args))
 end, { nargs = 1 })
 -- End
 --]]

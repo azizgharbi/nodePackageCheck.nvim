@@ -1,4 +1,13 @@
 -- ]]
+-- Function trim_string: this removes spaces from a string
+--]]
+local function trim_string(s)
+	return s:match("^%s*(.-)%s*$")
+end
+-- End
+--]]
+
+-- ]]
 -- Function get_property: Get value from a property name
 --]]
 local function get_property(json_string, property_name)
@@ -15,22 +24,29 @@ local utils = {}
 --]]
 -- Check the last version from package name calling registry.npmjs
 --]]
-utils.getPackageLatestVersion = function(packageName)
-	local url = "https://registry.npmjs.org/" .. packageName .. "/latest"
+utils.get_package_latest_version = function(packageName)
+	if trim_string(packageName) == nil then
+		return "Package not Found"
+	end
+	--]
+	-- Make a call to registry.npmjs to retrieve the package last version
+	--]
+	local url = "https://registry.npmjs.org/" .. trim_string(packageName) .. "/latest"
 	local handle = io.popen("curl -s '" .. url .. "'")
 	if handle then
 		-- read all file
 		local response = handle:read("*a")
 		handle:close()
 		-- check if the package exist
-		if string.find(response, "Not Found") then
+		if response == nil or response == "" or string.find(response, "Not Found") then
 			return "Package not Found"
 		else
 			return get_property(response, "version")
 		end
 	end
+	--]]
 end
 -- End
--- ]]
+--]]
 
 return utils
