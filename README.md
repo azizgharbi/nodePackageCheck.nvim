@@ -1,6 +1,6 @@
 # nodePackageCheck for Neovim
 
-- A plugin for Neovim that allows you to check updates and versions of your npm packages from within Neovim.
+- A plugin for Neovim that allows you to check updates and versions of your node packages from within Neovim.
 
 ### Example
 
