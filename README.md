@@ -22,6 +22,11 @@
 - Get the package latest version: `:NodePackageCheck [package name]`.
 - While this feature may not be particularly useful at this stage, it is being developed further.
 
+# Unit Test
+
+- Using busted: [busted](https://lunarmodules.github.io/busted/).
+- Inside `lua folder` run `busted .`
+
 # Contributing
 
 We welcome contributions from the community. If you have an idea for a feature or would like to report a bug, please create an issue on the project's GitHub repository.
