@@ -25,7 +25,7 @@
 
 #### Available commands
 
-- `:NodePackageCheck` : require a `string` parameter which is Package name.
+- `:NodePackageCheck` : Require a `string` parameter which is the `package name`.
 - `:NodepackagecheckUpdateCurrentLineVersion`.
 
 # Unit Test
