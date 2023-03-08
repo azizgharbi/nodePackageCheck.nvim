@@ -1,3 +1,13 @@
+--]]
+-- Get current file name
+--]]
+local function get_current_file_name()
+	local file_name = vim.api.nvim_buf_get_name(0):match("^.+/(.+)$")
+	return file_name
+end
+-- End
+--]]
+
 -- ]]
 -- Function trim_string: this removes spaces from a string
 --]]
@@ -41,10 +51,41 @@ utils.get_package_latest_version = function(packageName)
 		if response == nil or response == "" or string.find(response, "Not Found") then
 			return "Package not Found"
 		else
-			return get_property(response, "version")
+			return get_property(response, "version"):gsub('"', "")
 		end
 	end
 	--]]
+end
+-- End
+--]]
+
+--]]
+-- Is the current file package.json ?
+--]]
+utils.is_package_json_file = function()
+	return get_current_file_name() == "package.json"
+end
+-- End
+--]]
+
+--]]
+-- Get version from the current line
+--]]
+utils.get_version_from_current_line = function()
+	local current_line = vim.api.nvim_get_current_line()
+	local version = current_line:match('"[%^]*([%d%.]+)"')
+	return version
+end
+-- End
+--]]
+
+--]]
+-- Get package name from the current line
+--]]
+utils.get_package_name_from_current_line = function()
+	local current_line = vim.api.nvim_get_current_line()
+	local package_name = current_line:match("^([^:]+)"):gsub('"', "")
+	return package_name
 end
 -- End
 --]]
