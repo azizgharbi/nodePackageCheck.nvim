@@ -25,7 +25,7 @@
 
 #### Available commands
 
-- `:NodePackageCheck` : require {param:`string}` - Package name
+- `:NodePackageCheck` : require {param:`string`} - Package name
 - `:NodepackagecheckUpdateCurrentLineVersion`
 
 # Unit Test
