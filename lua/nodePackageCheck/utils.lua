@@ -91,9 +91,8 @@ end
 --]]
 
 --]]
--- TODO: update the current line with new version
+--  Update the current line with new version
 --]]
-
 utils.update_current_line_with_new_version = function()
 	local is_package_json = utils.is_package_json_file() -- is the current file package.json
 	if is_package_json then
@@ -103,12 +102,27 @@ utils.update_current_line_with_new_version = function()
 		local current_line_new_version = utils.get_package_latest_version(current_line_package_name):gsub('"', "") -- current updated version
 		local current_line_with_new_version = string.gsub(current_line, current_line_version, current_line_new_version) -- current line with the new package version
 
-		-- TODO: replace the line with the another with latest package version
-		print(current_line_with_new_version)
+		-- Replace the line with the another with latest package version
+		utils.set_text_in_current_line(current_line_with_new_version)
 	else
 		print("Error: please use this command in a package.json file")
 	end
 end
+-- End
+--]]
+
+--]]
+--  Set new text in the current line and save
+--]]
+utils.set_text_in_current_line = function(new_text)
+	-- get the current line number
+	local current_line_number = vim.fn.line(".")
+	-- set the new text for the current line
+	vim.api.nvim_buf_set_lines(0, current_line_number - 1, current_line_number, false, { new_text })
+	-- save the changes
+	vim.cmd("w")
+end
+
 -- End
 --]]
 

@@ -21,7 +21,7 @@
 - Currently, the plugin is in a work in progress state.
 - Get the package latest version: `:NodePackageCheck [package name]`.
 - While this feature may not be particularly useful at this stage, it is being developed further.
-- `:NodepackagecheckUpdateCurrentLineVersion` : Command to update the current line package version for the moment this will just print and not replace the line the work is in progress.
+- `:NodepackagecheckUpdateCurrentLineVersion` : Command to update the current line package version and save
 
 #### Available commands
 
