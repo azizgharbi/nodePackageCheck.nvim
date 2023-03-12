@@ -14,7 +14,7 @@ end
 -- Function trim_string: this removes spaces from a string
 --]]
 utils.trim_string = function(s)
-	return s:match("^%s*(.-)%s*$")
+	return s:gsub(" ", "")
 end
 -- End
 --]]
