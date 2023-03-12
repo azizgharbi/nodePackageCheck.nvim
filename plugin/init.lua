@@ -14,8 +14,7 @@ add_user_commands("Nodepackagecheck", function(opts)
 end, { nargs = 1 })
 
 add_user_commands("NodepackagecheckUpdateCurrentLineVersion", function()
-	npc.utils.update_current_line_with_new_version()
+	npc.utils.confirmation_to_update_line_version()
 end, {})
-
 -- End
 --]]
