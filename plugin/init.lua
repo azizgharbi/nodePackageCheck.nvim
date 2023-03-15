@@ -2,13 +2,10 @@ local npc = require("nodePackageCheck")
 local npc_config = require("nodePackageCheck.config")
 
 --]]
--- add highlight groups
+-- Add highlight groups
 npc_config.error_highlight()
 --End
 --]]
-
-local namespace_id = npc_config.get_namespace_id()
-local pattern = npc_config.package_version_pattern()
 
 --]]
 -- Commands definition
@@ -32,15 +29,13 @@ local groupCmd = vim.api.nvim_create_augroup("loadLatestVersion", { clear = true
 vim.api.nvim_create_autocmd("BufEnter", {
 	callback = function()
 		local buffer = vim.api.nvim_get_current_buf()
+		local pattern = npc_config.package_version_pattern()
 		local lines = vim.api.nvim_buf_get_lines(buffer, 0, -1, false)
+
 		for i, line in ipairs(lines) do
 			if string.match(line, pattern) then
 				-- TODO : work in progress
-				vim.api.nvim_buf_set_extmark(buffer, namespace_id, i - 1, 5, {
-					virt_text = { { "version test", "error_highlight" } },
-					virt_text_pos = "eol",
-					priority = 200,
-				})
+				npc_config.virtual_text_option(buffer, "Error", "error_highlight", i - 1, line:len())
 			end
 		end
 	end,
