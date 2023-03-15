@@ -1,11 +1,19 @@
 local npc = require("nodePackageCheck")
+local npc_config = require("nodePackageCheck.config")
+
+--]]
+-- add highlight groups
+npc_config.error_highlight()
+--End
+--]]
+
+local namespace_id = npc_config.get_namespace_id()
+local pattern = npc_config.package_version_pattern()
 
 --]]
 -- Commands definition
 --]]
-local add_user_commands = vim.api.nvim_create_user_command
-
-add_user_commands("Nodepackagecheck", function(opts)
+vim.api.nvim_create_user_command("Nodepackagecheck", function(opts)
 	if opts.args == nil then
 		print("Error: please provide a package name")
 		return
@@ -13,8 +21,28 @@ add_user_commands("Nodepackagecheck", function(opts)
 	print(npc.utils.get_package_latest_version(opts.args))
 end, { nargs = 1 })
 
-add_user_commands("NodepackagecheckUpdateCurrentLineVersion", function()
+vim.api.nvim_create_user_command("NodepackagecheckUpdateCurrentLineVersion", function()
 	npc.utils.confirmation_to_update_line_version()
 end, {})
 -- End
 --]]
+
+local groupCmd = vim.api.nvim_create_augroup("loadLatestVersion", { clear = true })
+
+vim.api.nvim_create_autocmd("BufEnter", {
+	callback = function()
+		local buffer = vim.api.nvim_get_current_buf()
+		local lines = vim.api.nvim_buf_get_lines(buffer, 0, -1, false)
+		for i, line in ipairs(lines) do
+			if string.match(line, pattern) then
+				-- TODO : work in progress
+				vim.api.nvim_buf_set_extmark(buffer, namespace_id, i - 1, 5, {
+					virt_text = { { "version test", "error_highlight" } },
+					virt_text_pos = "eol",
+					priority = 200,
+				})
+			end
+		end
+	end,
+	group = groupCmd,
+})
