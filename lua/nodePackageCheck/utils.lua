@@ -47,7 +47,7 @@ utils.get_package_latest_version = function(packageName)
 		local response = handle:read("*a")
 		handle:close()
 		-- check if the package exist
-		if response == nil or response == "" or string.find(response, "Not Found") then
+		if response == nil or response == "" or response:find("Not Found") then
 			return "Package not Found"
 		else
 			local version = utils.get_property_value(response, "version")
@@ -172,9 +172,8 @@ utils.load_packages_latest_versions = function()
 		local lines = vim.api.nvim_buf_get_lines(buffer, 0, -1, false)
 
 		for i, line in ipairs(lines) do
-			if string.match(line, pattern) then
+			if line:match(pattern) and not line:find("version") then
 				local new_version, _ = utils.get_package_line_info(line)
-				-- TODO : work in progress
 				config.virtual_text_option(buffer, new_version, "error_highlight", i - 1, line:len())
 			end
 		end

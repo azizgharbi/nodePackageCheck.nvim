@@ -1,7 +1,7 @@
 local config = {}
 
 config.package_version_pattern = function()
-	return '"@*[%w-/_@]+": "%d+%.%d+%.%d+"'
+	return '"@?[%w-/_@]+":%s?"[~%^]?%d+%.%d+%.%d+"'
 end
 
 config.get_namespace_id = function()
