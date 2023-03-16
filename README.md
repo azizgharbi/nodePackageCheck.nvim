@@ -22,11 +22,13 @@
 - Get the package latest version: `:NodePackageCheck [package name]`.
 - While this feature may not be particularly useful at this stage, it is being developed further.
 - `:NodepackagecheckUpdateCurrentLineVersion` : Command to update the current line package version and save
+- `:NodepackagecheckLoadVersions`: Load package version inside `package.json`.
 
 #### Available commands
 
 - `:NodePackageCheck` : Require a `string` parameter which is the `package name`.
 - `:NodepackagecheckUpdateCurrentLineVersion`.
+- `:NodepackagecheckLoadVersions`
 
 # Unit Test
 
