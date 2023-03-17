@@ -14,7 +14,7 @@
 
 #### Packer
 
-- `use("PACKAGE_PATH")`
+- `use("azizgharbi/nodePackageCheck.nvim")`
 
 # Usage
 
