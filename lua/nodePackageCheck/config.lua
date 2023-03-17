@@ -35,4 +35,18 @@ config.virtual_text_option = function(buffer, virt_text, group_h, line_num, col_
 	vim.api.nvim_buf_set_extmark(buffer, namespace_id, line_num, col_num, opts)
 end
 
+--]]
+-- Messages
+--]]
+config.ERROR_MESSAGES = {
+	WRONG_FILE = "Error: please use this command in a package.json file",
+	NO_PACKAGE = "This line doesn't contain any package",
+}
+
+config.INFO_MESSAGES = {
+	GOOD_VERSION = "Info: You are using already the latest version",
+	QUESTION = "DO you want to update this package version [Y/N]: ",
+}
+-- END
+--]]
 return config

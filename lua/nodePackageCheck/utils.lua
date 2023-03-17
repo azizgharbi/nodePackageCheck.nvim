@@ -12,7 +12,7 @@ end
 --]]
 
 -- ]]
--- Function trim_string: this removes spaces from a string
+-- Remove spaces from a string
 --]]
 utils.trim_string = function(s)
 	return s:gsub(" ", "")
@@ -120,15 +120,21 @@ end
 utils.confirmation_to_update_line_version = function()
 	local current_line = vim.api.nvim_get_current_line() -- current line
 	local new_version, old_version = utils.get_package_line_info(current_line)
+
+	if not current_line:match(config.package_version_pattern()) then
+		print(config.ERROR_MESSAGES.NO_PACKAGE)
+		return
+	end
+
 	if new_version ~= old_version then
-		local q = vim.fn.input("DO you want to update this package version [Y/N]: ")
+		local q = vim.fn.input(config.INFO_MESSAGES.QUESTION)
 		if q == "y" or q == "Y" then
 			utils.update_current_line_with_new_version()
 		else
 			return
 		end
 	else
-		print("Info: You are using already the latest version")
+		print(config.INFO_MESSAGES.GOOD_VERSION)
 	end
 end
 --End
@@ -144,7 +150,7 @@ utils.update_current_line_with_new_version = function()
 		-- Replace the line with the another with latest package version
 		utils.set_text_in_current_line(current_line_with_new_version)
 	else
-		print("Error: please use this command in a package.json file")
+		print(config.ERROR_MESSAGES.WRONG_FILE)
 	end
 end
 -- End
@@ -178,7 +184,7 @@ utils.load_packages_latest_versions = function()
 			end
 		end
 	else
-		print("Error: please use this command in a package.json file")
+		print(config.ERROR_MESSAGES.WRONG_FILE)
 	end
 end
 -- End
