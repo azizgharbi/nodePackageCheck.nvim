@@ -161,14 +161,13 @@ end
 utils.load_packages_latest_versions = function()
 	local is_package_json = utils.is_package_json_file() -- is the current file package.json
 	if is_package_json then
-		local buffer = vim.api.nvim_get_current_buf()
 		local pattern = config.package_version_pattern()
-		local lines = vim.api.nvim_buf_get_lines(buffer, 0, -1, false)
+		local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
 		-- Loading
 		for i, line in ipairs(lines) do
 			if line:match(pattern) and not line:find("version") then
 				local new_version, _ = utils.get_package_line_info(line)
-				config.virtual_text_option(buffer, new_version, "error_highlight", i - 1, line:len())
+				config.virtual_text_option(0, new_version, "error_highlight", i - 1, line:len())
 			end
 		end
 	-- End loading
