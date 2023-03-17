@@ -20,18 +20,6 @@ end
 -- End
 --]]
 
--- ]]
--- Function get_property: Get value from a property name
---]]
-utils.get_property_value = function(json_string, property_name)
-	local start_index = string.find(json_string, '"' .. property_name .. '":')
-		+ string.len('"' .. property_name .. '":')
-	local end_index = string.find(json_string, ",", start_index) - 1
-	return string.sub(json_string, start_index, end_index):gsub('"', "")
-end
--- End
---]]
-
 --]]
 -- Check the last version from package name calling registry.npmjs
 --]]
@@ -41,16 +29,16 @@ utils.get_package_latest_version = function(packageName)
 	end
 	-- Make a call to registry.npmjs to retrieve the package last version
 	local url = "https://registry.npmjs.org/" .. utils.trim_string(packageName) .. "/latest"
-	local handle = io.popen("curl -s '" .. url .. "'")
+	local cmd = "curl -s '" .. url .. '\' | grep -Po \'(?<="version":")[^"]*\''
+	local handle = io.popen(cmd)
 	if handle then
 		-- read all file
-		local response = handle:read("*a")
+		local version = handle:read("*line")
 		handle:close()
 		-- check if the package exist
-		if response == nil or response == "" or response:find("Not Found") then
+		if version == nil or version == "" or version:find("Not Found") then
 			return "Package not Found"
 		else
-			local version = utils.get_property_value(response, "version")
 			return version
 		end
 	end
@@ -96,7 +84,7 @@ utils.get_new_version_from_current_line = function()
 	local current_line_version = utils.get_version_from_current_line(current_line) -- current line package version
 	local current_line_package_name = utils.get_package_name_from_current_line(current_line) --current line package name
 	local current_line_new_version = utils.get_package_latest_version(current_line_package_name) -- current updated version
-	local current_line_with_new_version = string.gsub(current_line, current_line_version, current_line_new_version) -- current line with the new package version
+	local current_line_with_new_version = current_line:gsub(current_line_version, current_line_new_version) -- current line with the new package version
 	return current_line_with_new_version
 end
 --End
@@ -176,13 +164,14 @@ utils.load_packages_latest_versions = function()
 		local buffer = vim.api.nvim_get_current_buf()
 		local pattern = config.package_version_pattern()
 		local lines = vim.api.nvim_buf_get_lines(buffer, 0, -1, false)
-
+		-- Loading
 		for i, line in ipairs(lines) do
 			if line:match(pattern) and not line:find("version") then
 				local new_version, _ = utils.get_package_line_info(line)
 				config.virtual_text_option(buffer, new_version, "error_highlight", i - 1, line:len())
 			end
 		end
+	-- End loading
 	else
 		print(config.ERROR_MESSAGES.WRONG_FILE)
 	end
