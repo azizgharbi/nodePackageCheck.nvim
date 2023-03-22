@@ -25,7 +25,7 @@ end
 --]]
 utils.get_package_latest_version = function(packageName)
 	if utils.trim_string(packageName) == nil then
-		return "Package not Found"
+		return config.ERROR_MESSAGES.PACKAGE_NOT_FOUND
 	end
 	-- Make a call to registry.npmjs to retrieve the package last version
 	local url = "https://registry.npmjs.org/" .. utils.trim_string(packageName) .. "/latest"
@@ -37,7 +37,7 @@ utils.get_package_latest_version = function(packageName)
 		handle:close()
 		-- check if the package exist
 		if version == nil or version == "" or version:find("Not Found") then
-			return "Package not Found"
+			return config.ERROR_MESSAGES.PACKAGE_NOT_FOUND
 		else
 			return version
 		end
@@ -76,6 +76,16 @@ end
 --]]
 
 --]]
+--  Set new text in the current line and save
+--]]
+utils.set_text_in_current_line = function(new_text, current_line_number)
+	vim.api.nvim_buf_set_lines(0, current_line_number - 1, current_line_number, false, { new_text })
+	vim.api.nvim_buf_clear_namespace(0, config.get_namespace_id(), 0, -1)
+end
+-- End
+--]]
+
+--]]
 -- Get new line version
 --]]
 
@@ -108,6 +118,7 @@ end
 utils.confirmation_to_update_line_version = function()
 	local current_line = vim.api.nvim_get_current_line() -- current line
 	local new_version, old_version = utils.get_package_line_info(current_line)
+	local current_line_number = vim.fn.line(".") -- get the current line number
 
 	if not current_line:match(config.package_version_pattern()) then
 		print(config.ERROR_MESSAGES.NO_PACKAGE)
@@ -117,12 +128,14 @@ utils.confirmation_to_update_line_version = function()
 	if new_version ~= old_version then
 		local q = vim.fn.input(config.INFO_MESSAGES.QUESTION)
 		if q == "y" or q == "Y" then
-			utils.update_current_line_with_new_version()
+			utils.update_current_line_with_new_version(current_line_number)
+			config.virtual_text_option(0, new_version, "success_highlight", current_line_number - 1, current_line:len())
 		else
-			return
+			config.virtual_text_option(0, new_version, "error_highlight", current_line_number - 1, current_line:len())
 		end
 	else
 		print(config.INFO_MESSAGES.GOOD_VERSION)
+		config.virtual_text_option(0, new_version, "success_highlight", current_line_number - 1, current_line:len())
 	end
 end
 --End
@@ -131,46 +144,12 @@ end
 --]]
 --  Update the current line with new version
 --]]
-utils.update_current_line_with_new_version = function()
+utils.update_current_line_with_new_version = function(current_line_number)
 	local is_package_json = utils.is_package_json_file() -- is the current file package.json
 	if is_package_json then
 		local current_line_with_new_version = utils.get_new_version_from_current_line()
 		-- Replace the line with the another with latest package version
-		utils.set_text_in_current_line(current_line_with_new_version)
-	else
-		print(config.ERROR_MESSAGES.WRONG_FILE)
-	end
-end
--- End
---]]
-
---]]
---  Set new text in the current line and save
---]]
-utils.set_text_in_current_line = function(new_text)
-	local current_line_number = vim.fn.line(".") -- get the current line number
-	vim.api.nvim_buf_set_lines(0, current_line_number - 1, current_line_number, false, { new_text })
-	vim.api.nvim_buf_clear_namespace(0, config.get_namespace_id(), 0, -1)
-end
--- End
---]]
-
---]]
---  Load package lastest versions
---]]
-utils.load_packages_latest_versions = function()
-	local is_package_json = utils.is_package_json_file() -- is the current file package.json
-	if is_package_json then
-		local pattern = config.package_version_pattern()
-		local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-		-- Loading
-		for i, line in ipairs(lines) do
-			if line:match(pattern) and not line:find("version") then
-				local new_version, _ = utils.get_package_line_info(line)
-				config.virtual_text_option(0, new_version, "error_highlight", i - 1, line:len())
-			end
-		end
-	-- End loading
+		utils.set_text_in_current_line(current_line_with_new_version, current_line_number)
 	else
 		print(config.ERROR_MESSAGES.WRONG_FILE)
 	end

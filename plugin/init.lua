@@ -15,7 +15,7 @@ npc_config.warning_highlight()
 --]]
 vim.api.nvim_create_user_command("NodepackagecheckVersion", function(opts)
 	if opts.args == nil then
-		print("Error: please provide a package name")
+		print(npc.config.ERROR_MESSAGES.MISSING_PACKAGE_NAME)
 		return
 	end
 	print(npc.utils.get_package_latest_version(opts.args))
@@ -23,10 +23,6 @@ end, { nargs = 1 })
 
 vim.api.nvim_create_user_command("NodepackagecheckUpdateLineVersion", function()
 	npc.utils.confirmation_to_update_line_version()
-end, {})
-
-vim.api.nvim_create_user_command("NodepackagecheckLoadVersions", function()
-	npc.utils.load_packages_latest_versions()
 end, {})
 -- End
 --]]

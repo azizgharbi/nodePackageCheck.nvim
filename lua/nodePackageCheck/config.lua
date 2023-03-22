@@ -41,6 +41,8 @@ end
 config.ERROR_MESSAGES = {
 	WRONG_FILE = "Error: please use this command in a package.json file",
 	NO_PACKAGE = "This line doesn't contain any package",
+	PACKAGE_NOT_FOUND = "The package is not found",
+	MISSING_PACKAGE_NAME = "Error: please provide the package name",
 }
 
 config.INFO_MESSAGES = {
