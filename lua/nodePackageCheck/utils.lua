@@ -1,28 +1,20 @@
 local config = require("nodePackageCheck.config")
 local utils = {}
 
---]]
 -- Get current file name
---]]
 utils.get_current_file_name = function()
 	local file_name = vim.api.nvim_buf_get_name(0):match("^.+/(.+)$")
 	return file_name
 end
 -- End
---]]
 
--- ]]
 -- Remove spaces from a string
---]]
 utils.trim_string = function(s)
 	return s:gsub(" ", "")
 end
 -- End
---]]
 
---]]
 -- Check the last version from package name calling registry.npmjs
---]]
 utils.get_package_latest_version = function(packageName)
 	if utils.trim_string(packageName) == nil then
 		return config.ERROR_MESSAGES.PACKAGE_NOT_FOUND
@@ -44,51 +36,35 @@ utils.get_package_latest_version = function(packageName)
 	end
 end
 -- End
---]]
 
---]]
 -- Is the current file package.json
---]]
 utils.is_package_json_file = function()
 	return utils.get_current_file_name() == "package.json"
 end
 -- End
---]]
 
---]]
 -- Get version from the current line
---]]
 utils.get_version_from_current_line = function(line)
 	local version = line:match('"[%^]*([%d%.]+)"')
 	return version
 end
 -- End
---]]
 
---]]
 -- Get package name from the current line
---]]
 utils.get_package_name_from_current_line = function(line)
 	local package_name = line:match("^([^:]+)"):gsub('"', "")
 	return package_name
 end
 -- End
---]]
 
---]]
 --  Set new text in the current line and save
---]]
 utils.set_text_in_current_line = function(new_text, current_line_number)
 	vim.api.nvim_buf_set_lines(0, current_line_number - 1, current_line_number, false, { new_text })
 	vim.api.nvim_buf_clear_namespace(0, config.get_namespace_id(), 0, -1)
 end
 -- End
---]]
 
---]]
 -- Get new line version
---]]
-
 utils.get_new_version_from_current_line = function()
 	local current_line = vim.api.nvim_get_current_line() -- current line
 	local current_line_version = utils.get_version_from_current_line(current_line) -- current line package version
@@ -98,11 +74,8 @@ utils.get_new_version_from_current_line = function()
 	return current_line_with_new_version
 end
 --End
---]]
 
---]]
 -- Get old version and new version from the current line
---]]
 utils.get_package_line_info = function(line)
 	local packageName = utils.get_package_name_from_current_line(line)
 	local new_version = utils.get_package_latest_version(packageName)
@@ -110,11 +83,8 @@ utils.get_package_line_info = function(line)
 	return new_version, old_version
 end
 --End
---]]
 
---]]
 -- Confirmation to update line version
---]]
 utils.confirmation_to_update_line_version = function()
 	local current_line = vim.api.nvim_get_current_line() -- current line
 	local new_version, old_version = utils.get_package_line_info(current_line)
@@ -139,11 +109,8 @@ utils.confirmation_to_update_line_version = function()
 	end
 end
 --End
---]]
 
---]]
 --  Update the current line with new version
---]]
 utils.update_current_line_with_new_version = function(current_line_number)
 	local is_package_json = utils.is_package_json_file() -- is the current file package.json
 	if is_package_json then
@@ -155,6 +122,5 @@ utils.update_current_line_with_new_version = function(current_line_number)
 	end
 end
 -- End
---]]
 
 return utils
