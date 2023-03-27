@@ -49,6 +49,7 @@ config.ERROR_MESSAGES = {
 	NO_PACKAGE = "This line doesn't contain any package",
 	PACKAGE_NOT_FOUND = "The package is not found",
 	MISSING_PACKAGE_NAME = "Error: please provide the package name",
+	SOMETHING_WRONG = "Error: something wrong",
 }
 
 config.INFO_MESSAGES = {

@@ -1,4 +1,5 @@
 local config = require("nodePackageCheck.config")
+-- init
 local utils = {}
 
 -- Get current file name
@@ -60,7 +61,6 @@ end
 --  Set new text in the current line and save
 utils.set_text_in_current_line = function(new_text, current_line_number)
 	vim.api.nvim_buf_set_lines(0, current_line_number - 1, current_line_number, false, { new_text })
-	vim.api.nvim_buf_clear_namespace(0, config.get_namespace_id(), 0, -1)
 end
 -- End
 
@@ -99,13 +99,31 @@ utils.confirmation_to_update_line_version = function()
 		local q = vim.fn.input(config.INFO_MESSAGES.QUESTION)
 		if q == "y" or q == "Y" then
 			utils.update_current_line_with_new_version(current_line_number)
-			config.virtual_text_option(0, new_version, "success_highlight", current_line_number - 1, current_line:len())
+			config.virtual_text_option(
+				0,
+				" " .. new_version,
+				"success_highlight",
+				current_line_number - 1,
+				current_line:len()
+			)
 		else
-			config.virtual_text_option(0, new_version, "error_highlight", current_line_number - 1, current_line:len())
+			config.virtual_text_option(
+				0,
+				" " .. new_version,
+				"error_highlight",
+				current_line_number - 1,
+				current_line:len()
+			)
 		end
 	else
 		print(config.INFO_MESSAGES.GOOD_VERSION)
-		config.virtual_text_option(0, new_version, "success_highlight", current_line_number - 1, current_line:len())
+		config.virtual_text_option(
+			0,
+			" " .. new_version,
+			"success_highlight",
+			current_line_number - 1,
+			current_line:len()
+		)
 	end
 end
 --End

@@ -20,10 +20,18 @@ vim.api.nvim_create_user_command("NodepackagecheckVersion", function(opts)
 		print(npc.config.ERROR_MESSAGES.MISSING_PACKAGE_NAME)
 		return
 	end
-	print(npc.utils.get_package_latest_version(opts.args))
+	local s, res = pcall(npc.utils.get_package_latest_version, opts.args)
+	if s then
+		print(res)
+	else
+		print(npc.config.ERROR_MESSAGES.SOMETHING_WRONG)
+	end
 end, { nargs = 1 })
 
 vim.api.nvim_create_user_command("NodepackagecheckUpdateLineVersion", function()
-	npc.utils.confirmation_to_update_line_version()
+	local s, _ = pcall(npc.utils.confirmation_to_update_line_version)
+	if not s then
+		print(npc.config.ERROR_MESSAGES.SOMETHING_WRONG)
+	end
 end, {})
 -- End
