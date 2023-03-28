@@ -19,7 +19,7 @@ end
 utils.get_package_latest_version = function(packageName)
 	if utils.trim_string(packageName) == nil then
 		print(config.ERROR_MESSAGES.PACKAGE_NOT_FOUND)
-		return
+		return nil
 	end
 	-- Make a call to registry.npmjs to retrieve the package last version
 	local url = "https://registry.npmjs.org/" .. utils.trim_string(packageName) .. "/latest"
@@ -32,7 +32,7 @@ utils.get_package_latest_version = function(packageName)
 		-- check if the package exist
 		if version == nil or version == "" or version:find("Not Found") then
 			print(config.ERROR_MESSAGES.PACKAGE_NOT_FOUND)
-			return
+			return nil
 		else
 			return version
 		end
@@ -72,9 +72,11 @@ utils.get_new_version_from_current_line = function()
 	local current_line_version = utils.get_version_from_current_line(current_line) -- current line package version
 	local current_line_package_name = utils.get_package_name_from_current_line(current_line) --current line package name
 	local current_line_new_version = utils.get_package_latest_version(current_line_package_name) -- current updated version
-	if current_line_new_version ~= nil then
+	if current_line_new_version then
 		local current_line_with_new_version = current_line:gsub(current_line_version, current_line_new_version) -- current line with the new package version
 		return current_line_with_new_version
+	else
+		return nil
 	end
 end
 --End
@@ -138,7 +140,9 @@ utils.update_current_line_with_new_version = function(current_line_number)
 	if is_package_json then
 		local current_line_with_new_version = utils.get_new_version_from_current_line()
 		-- Replace the line with the another with latest package version
-		utils.set_text_in_current_line(current_line_with_new_version, current_line_number)
+		if current_line_with_new_version then
+			utils.set_text_in_current_line(current_line_with_new_version, current_line_number)
+		end
 	else
 		print(config.ERROR_MESSAGES.WRONG_FILE)
 	end
