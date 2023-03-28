@@ -18,7 +18,8 @@ end
 -- Check the last version from package name calling registry.npmjs
 utils.get_package_latest_version = function(packageName)
 	if utils.trim_string(packageName) == nil then
-		return config.ERROR_MESSAGES.PACKAGE_NOT_FOUND
+		print(config.ERROR_MESSAGES.PACKAGE_NOT_FOUND)
+		return
 	end
 	-- Make a call to registry.npmjs to retrieve the package last version
 	local url = "https://registry.npmjs.org/" .. utils.trim_string(packageName) .. "/latest"
@@ -30,7 +31,8 @@ utils.get_package_latest_version = function(packageName)
 		handle:close()
 		-- check if the package exist
 		if version == nil or version == "" or version:find("Not Found") then
-			return config.ERROR_MESSAGES.PACKAGE_NOT_FOUND
+			print(config.ERROR_MESSAGES.PACKAGE_NOT_FOUND)
+			return
 		else
 			return version
 		end
