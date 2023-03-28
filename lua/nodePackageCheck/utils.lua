@@ -72,8 +72,10 @@ utils.get_new_version_from_current_line = function()
 	local current_line_version = utils.get_version_from_current_line(current_line) -- current line package version
 	local current_line_package_name = utils.get_package_name_from_current_line(current_line) --current line package name
 	local current_line_new_version = utils.get_package_latest_version(current_line_package_name) -- current updated version
-	local current_line_with_new_version = current_line:gsub(current_line_version, current_line_new_version) -- current line with the new package version
-	return current_line_with_new_version
+	if current_line_new_version ~= nil then
+		local current_line_with_new_version = current_line:gsub(current_line_version, current_line_new_version) -- current line with the new package version
+		return current_line_with_new_version
+	end
 end
 --End
 
