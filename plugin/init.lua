@@ -5,33 +5,34 @@
 -- ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
 
 local npc = require("nodePackageCheck")
-local npc_config = require("nodePackageCheck.config")
 
 -- Load highlight groups
-npc_config.error_highlight()
-npc_config.success_highlight()
-npc_config.info_highlight()
-npc_config.warning_highlight()
+
+npc.Highlights.error_highlight()
+npc.Highlights.success_highlight()
+npc.Highlights.info_highlight()
+npc.Highlights.warning_highlight()
 --End
 
 -- Commands definition
 vim.api.nvim_create_user_command("NodepackagecheckVersion", function(opts)
 	if opts.args == nil then
-		print(npc.config.ERROR_MESSAGES.MISSING_PACKAGE_NAME)
+		print(npc.Messages.ERROR_MESSAGES.MISSING_PACKAGE_NAME)
 		return
 	end
-	local s, res = pcall(npc.utils.get_package_latest_version, opts.args)
+	local s, res = pcall(npc.Utils.get_package_latest_version, opts.args)
 	if s then
 		print(res)
 	else
-		print(npc.config.ERROR_MESSAGES.SOMETHING_WRONG)
+		print(npc.Config.ERROR_MESSAGES.SOMETHING_WRONG)
 	end
 end, { nargs = 1 })
 
 vim.api.nvim_create_user_command("NodepackagecheckUpdateLineVersion", function()
-	local s, _ = pcall(npc.utils.confirmation_to_update_line_version)
+	local s, error = pcall(npc.Utils.confirmation_to_update_line_version)
+	print(error)
 	if not s then
-		print(npc.config.ERROR_MESSAGES.SOMETHING_WRONG)
+		print(npc.Messages.ERROR_MESSAGES.SOMETHING_WRONG)
 	end
 end, {})
 -- End

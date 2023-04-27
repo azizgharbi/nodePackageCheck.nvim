@@ -1,5 +1,7 @@
 -- return nodePackageCheck
 return {
-	utils = require("nodePackageCheck.utils"),
-	config = require("nodePackageCheck.config"),
+	Utils = require("nodePackageCheck.utils"),
+	Config = require("nodePackageCheck.config"),
+	Highlights = require("nodePackageCheck.highlights"),
+	Messages = require("nodePackageCheck.messages"),
 }
