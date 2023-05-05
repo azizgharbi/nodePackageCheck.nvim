@@ -3,7 +3,10 @@ local Messages = require("nodePackageCheck.messages")
 
 -- init
 local Utils = {}
-
+local icons = {
+	error = " ✗",
+	success = " ✔",
+}
 -- Get current file name
 Utils.get_current_file_name = function()
 	local file_name = vim.api.nvim_buf_get_name(0):match("^.+/(.+)$")
@@ -109,29 +112,17 @@ Utils.confirmation_to_update_line_version = function()
 			Utils.update_current_line_with_new_version(current_line_number)
 			Config.virtual_text_option(
 				0,
-				" " .. new_version,
+				icons.success,
 				"success_highlight",
 				current_line_number - 1,
 				current_line:len()
 			)
 		else
-			Config.virtual_text_option(
-				0,
-				" " .. new_version,
-				"error_highlight",
-				current_line_number - 1,
-				current_line:len()
-			)
+			Config.virtual_text_option(0, icons.error, "error_highlight", current_line_number - 1, current_line:len())
 		end
 	else
 		print(Messages.INFO_MESSAGES.GOOD_VERSION)
-		Config.virtual_text_option(
-			0,
-			" " .. new_version,
-			"success_highlight",
-			current_line_number - 1,
-			current_line:len()
-		)
+		Config.virtual_text_option(0, icons.success, "success_highlight", current_line_number - 1, current_line:len())
 	end
 end
 --End
@@ -150,5 +141,36 @@ Utils.update_current_line_with_new_version = function(current_line_number)
 	end
 end
 -- End
+
+-- Get visual selection
+Utils.get_visual_selection = function()
+	local start_pos = vim.fn.getpos("'<")
+	local end_pos = vim.fn.getpos("'>")
+	local start_line = start_pos[2] - 1
+	local start_col = start_pos[3] - 1
+	local end_line = end_pos[2] - 1
+	local end_col = end_pos[3] - (end_pos[3] == 0 and 1 or 0)
+
+	return start_line, start_col, end_line, end_col
+end
+
+-- Show selected text to update
+Utils.show_selected_text = function()
+	-- Get start and end positions of the visual selection
+	local start_line, start_col, end_line, end_col = Utils.get_visual_selection()
+	-- Get the lines of the visual selection
+	local selected_lines = vim.api.nvim_buf_get_lines(0, start_line, end_line + 1, false)
+	-- If the selection is only one line, just get the substring
+	if start_line == end_line then
+		print(selected_lines[1]:sub(start_col + 1, end_col + 1))
+		return
+	end
+	-- Process the first and last lines separately
+	selected_lines[1] = selected_lines[1]:sub(start_col + 1)
+	selected_lines[#selected_lines] = selected_lines[#selected_lines]:sub(1, end_col + 1)
+	-- Concatenate the lines with newlines and print
+	local selected_text = table.concat(selected_lines, "\n")
+	return selected_text
+end
 
 return Utils
