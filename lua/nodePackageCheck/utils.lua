@@ -72,7 +72,7 @@ end
 -- End
 
 -- Get new line version
-Utils.get_new_version_from_current_line = function()
+Utils.get_current_line_with_new_version = function()
 	local current_line = vim.api.nvim_get_current_line() -- current line
 	local current_line_version = Utils.get_version_from_current_line(current_line) -- current line package version
 	local current_line_package_name = Utils.get_package_name_from_current_line(current_line) --current line package name
@@ -131,10 +131,24 @@ end
 Utils.update_current_line_with_new_version = function(current_line_number)
 	local is_package_json = Utils.is_package_json_file() -- is the current file package.json
 	if is_package_json then
-		local current_line_with_new_version = Utils.get_new_version_from_current_line()
+		local current_line_with_new_version = Utils.get_current_line_with_new_version()
 		-- Replace the line with the another with latest package version
 		if current_line_with_new_version then
 			Utils.set_text_in_current_line(current_line_with_new_version, current_line_number)
+		end
+	else
+		print(Messages.ERROR_MESSAGES.WRONG_FILE)
+	end
+end
+-- End
+
+-- Update line with new version aziz
+Utils.update_line_with_new_version = function(line)
+	local is_package_json = Utils.is_package_json_file() -- is the current file package.json
+	if is_package_json then
+		local new_version, old_version = Utils.get_package_line_info(line)
+		if not new_version then
+			line:gsub(old_version, new_version)
 		end
 	else
 		print(Messages.ERROR_MESSAGES.WRONG_FILE)
@@ -147,30 +161,29 @@ Utils.get_visual_selection = function()
 	local start_pos = vim.fn.getpos("'<")
 	local end_pos = vim.fn.getpos("'>")
 	local start_line = start_pos[2] - 1
-	local start_col = start_pos[3] - 1
 	local end_line = end_pos[2] - 1
-	local end_col = end_pos[3] - (end_pos[3] == 0 and 1 or 0)
-
-	return start_line, start_col, end_line, end_col
+	return start_line, end_line
 end
 
 -- Show selected text to update
-Utils.show_selected_text = function()
-	-- Get start and end positions of the visual selection
-	local start_line, start_col, end_line, end_col = Utils.get_visual_selection()
-	-- Get the lines of the visual selection
+Utils.get_selected_lines = function()
+	local start_line, end_line = Utils.get_visual_selection()
 	local selected_lines = vim.api.nvim_buf_get_lines(0, start_line, end_line + 1, false)
-	-- If the selection is only one line, just get the substring
-	if start_line == end_line then
-		print(selected_lines[1]:sub(start_col + 1, end_col + 1))
-		return
-	end
-	-- Process the first and last lines separately
-	selected_lines[1] = selected_lines[1]:sub(start_col + 1)
-	selected_lines[#selected_lines] = selected_lines[#selected_lines]:sub(1, end_col + 1)
-	-- Concatenate the lines with newlines and print
 	local selected_text = table.concat(selected_lines, "\n")
-	return selected_text
+	return start_line + 1, selected_text
+end
+
+-- Multiple update
+Utils.Mutiple_update_lines_version = function()
+	local line_number, selected_lines = Utils.get_selected_lines()
+	if selected_lines then
+		for line in selected_lines:gmatch("[^\n]+") do
+			-- local new_line = Utils.update_line_with_new_version(line)
+			print(line, line_number)
+			-- Utils.set_text_in_current_line(new_line, line_number)
+			line_number = line_number + 1
+		end
+	end
 end
 
 return Utils

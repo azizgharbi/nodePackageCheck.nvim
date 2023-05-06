@@ -33,12 +33,7 @@ vim.api.nvim_create_user_command("NodepackagecheckUpdateLineVersion", function()
 end, {})
 
 vim.api.nvim_create_user_command("TestPlugin", function()
-	local selected_text, error = require("nodePackageCheck").Utils.show_selected_text()
-	if error then
-		print(error)
-		return
-	end
-	print(selected_text)
+	require("nodePackageCheck").Utils.Mutiple_update_lines_version()
 end, { range = true })
 
 -- End
