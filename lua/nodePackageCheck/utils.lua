@@ -1,47 +1,20 @@
 local Config = require("nodePackageCheck.config")
 local Messages = require("nodePackageCheck.messages")
+local Service = require("nodePackageCheck.service")
 
 -- init
 local Utils = {}
+
+-- Icons
 local icons = {
 	error = " ✗",
 	success = " ✔",
 }
+
 -- Get current file name
 Utils.get_current_file_name = function()
 	local file_name = vim.api.nvim_buf_get_name(0):match("^.+/(.+)$")
 	return file_name
-end
--- End
-
--- Remove spaces from a string
-Utils.trim_string = function(s)
-	return s:gsub(" ", "")
-end
--- End
-
--- Check the last version from package name calling registry.npmjs
-Utils.get_package_latest_version = function(packageName)
-	if Utils.trim_string(packageName) == nil then
-		print(Messages.ERROR_MESSAGES.PACKAGE_NOT_FOUND)
-		return nil
-	end
-	-- Make a call to registry.npmjs to retrieve the package last version
-	local url = "https://registry.npmjs.org/" .. Utils.trim_string(packageName) .. "/latest"
-	local cmd = "curl -s '" .. url .. '\' | grep -Po \'(?<="version":")[^"]*\''
-	local handle = io.popen(cmd)
-	if handle then
-		-- read all file
-		local version = handle:read("*line")
-		handle:close()
-		-- check if the package exist
-		if version == nil or version == "" or version:find("Not Found") then
-			print(Messages.ERROR_MESSAGES.PACKAGE_NOT_FOUND)
-			return nil
-		else
-			return version
-		end
-	end
 end
 -- End
 
@@ -76,7 +49,7 @@ Utils.get_current_line_with_new_version = function()
 	local current_line = vim.api.nvim_get_current_line() -- current line
 	local current_line_version = Utils.get_version_from_current_line(current_line) -- current line package version
 	local current_line_package_name = Utils.get_package_name_from_current_line(current_line) --current line package name
-	local current_line_new_version = Utils.get_package_latest_version(current_line_package_name) -- current updated version
+	local current_line_new_version = Service.get_package_latest_version(current_line_package_name) -- current updated version
 	if current_line_new_version then
 		local current_line_with_new_version = current_line:gsub(current_line_version, current_line_new_version) -- current line with the new package version
 		return current_line_with_new_version
@@ -89,7 +62,7 @@ end
 -- Get old version and new version from the current line
 Utils.get_package_line_info = function(line)
 	local packageName = Utils.get_package_name_from_current_line(line)
-	local new_version = Utils.get_package_latest_version(packageName)
+	local new_version = Service.get_package_latest_version(packageName)
 	local old_version = Utils.get_version_from_current_line(line)
 	return new_version, old_version
 end
