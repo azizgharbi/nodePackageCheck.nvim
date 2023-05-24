@@ -32,4 +32,11 @@ Service.get_package_latest_version = function(packageName)
 end
 -- End
 
+-- async logic
+
+Service.get_package_latest_version_coroutine = coroutine.create(function(package)
+	local version = Service.get_package_latest_version(package)
+	coroutine.yield(version)
+end)
+
 return Service

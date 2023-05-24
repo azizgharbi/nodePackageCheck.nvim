@@ -146,14 +146,24 @@ Utils.get_selected_lines = function()
 	return start_line + 1, selected_text
 end
 
+-- Multiple line update line
+
+Utils.one_line_update = function(line, line_number)
+	local package = Utils.get_package_name_from_current_line(line)
+	local _, new_version = coroutine.resume(Service.get_package_latest_version_coroutine, package)
+	print(new_version)
+	local old_version = Utils.get_version_from_current_line(line)
+	local new_line = line:gsub(new_version, old_version)
+	Utils.set_text_in_current_line(new_line, line_number)
+	Config.virtual_text_option(0, icons.success, "success_highlight", line_number - 1, line:len())
+end
+
 -- Multiple update
-Utils.Mutiple_update_lines_version = function()
+Utils.mutiple_update_lines_version = function()
 	local line_number, selected_lines = Utils.get_selected_lines()
 	if selected_lines then
 		for line in selected_lines:gmatch("[^\n]+") do
-			-- local new_line = Utils.update_line_with_new_version(line)
-			print(line, line_number)
-			-- Utils.set_text_in_current_line(new_line, line_number)
+			Utils.one_line_update(line, line_number)
 			line_number = line_number + 1
 		end
 	end
