@@ -9,10 +9,6 @@ end
 
 -- Check the last version from package name calling registry.npmjs
 Service.get_package_latest_version = function(packageName)
-	if Service.trim_string(packageName) == nil then
-		print(Messages.ERROR_MESSAGES.PACKAGE_NOT_FOUND)
-		return nil
-	end
 	-- Make a call to registry.npmjs to retrieve the package last version
 	local url = "https://registry.npmjs.org/" .. trim_string(packageName) .. "/latest"
 	local cmd = "curl -s '" .. url .. '\' | grep -Po \'(?<="version":")[^"]*\''
@@ -26,17 +22,12 @@ Service.get_package_latest_version = function(packageName)
 			print(Messages.ERROR_MESSAGES.PACKAGE_NOT_FOUND)
 			return nil
 		else
-			return version
+			coroutine.yield(version)
 		end
 	end
 end
 -- End
 
 -- async logic
-
-Service.get_package_latest_version_coroutine = coroutine.create(function(package)
-	local version = Service.get_package_latest_version(package)
-	coroutine.yield(version)
-end)
 
 return Service

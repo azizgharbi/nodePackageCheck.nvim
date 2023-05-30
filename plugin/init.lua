@@ -12,28 +12,18 @@ require("nodePackageCheck").Highlights.warning_highlight()
 --End
 
 -- Commands definition
-vim.api.nvim_create_user_command("NodepackagecheckVersion", function(opts)
-	if opts.args == nil then
-		print(require("nodePackageCheck").Messages.ERROR_MESSAGES.MISSING_PACKAGE_NAME)
-		return
-	end
-	local s, res = pcall(require("nodePackageCheck").Utils.get_package_latest_version, opts.args)
-	if s then
-		print(res)
-	else
-		print(require("nodePackageCheck").Config.ERROR_MESSAGES.SOMETHING_WRONG)
-	end
-end, { nargs = 1 })
-
-vim.api.nvim_create_user_command("NodepackagecheckUpdateLineVersion", function()
+vim.api.nvim_create_user_command("NPCUpdateLineVersion", function()
 	local _, error = pcall(require("nodePackageCheck").Utils.confirmation_to_update_line_version)
 	if error then
 		print(require("nodePackageCheck").Messages.ERROR_MESSAGES.SOMETHING_WRONG)
 	end
 end, {})
 
-vim.api.nvim_create_user_command("TestPlugin", function()
-	require("nodePackageCheck").Utils.mutiple_update_lines_version()
+vim.api.nvim_create_user_command("NPCUpdateMultipleLinesVersion", function()
+	local _, error = pcall(require("nodePackageCheck").Utils.mutiple_update_lines_version)
+	if error then
+		print(require("nodePackageCheck").Messages.ERROR_MESSAGES.SOMETHING_WRONG)
+	end
 end, { range = true })
 
 -- End

@@ -4,7 +4,7 @@
 
 ### Example
 
-- Show the latest verion of any package from `registry.npmjs`.
+- Show the latest version of any package from `registry.npmjs`.
 - Check if packages are outdated inside `package.json`.
 
 # Installation
@@ -16,17 +16,10 @@
 
 - `use("azizgharbi/nodePackageCheck.nvim")`
 
-# Usage
-
-- Currently, the plugin is in a work in progress state.
-- Get the package latest version: `:NodePackageCheckVersion [package name]`.
-- While this feature may not be particularly useful at this stage, it is being developed further.
-- `:NodepackagecheckUpdateLineVersion` : Command to update the current line package version.
-
 #### Available commands
 
-- `:NodePackageCheckVersion` : Require a `string` parameter which is the `package name`.
-- `:NodepackagecheckUpdateLineVersion`.
+- `:NPCUpdateLineVersion`: Run the command on the line of the package whose version you wish to update.
+- `:NPCUpdateMultipleLinesVersion`: Choose the lines in `packages.json` where you intend to update the package versions.
 
 # Unit Test
 

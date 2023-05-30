@@ -49,7 +49,9 @@ Utils.get_current_line_with_new_version = function()
 	local current_line = vim.api.nvim_get_current_line() -- current line
 	local current_line_version = Utils.get_version_from_current_line(current_line) -- current line package version
 	local current_line_package_name = Utils.get_package_name_from_current_line(current_line) --current line package name
-	local current_line_new_version = Service.get_package_latest_version(current_line_package_name) -- current updated version
+	local co = coroutine.create(Service.get_package_latest_version)
+	local _, current_line_new_version = coroutine.resume(co, current_line_package_name)
+	-- current updated version
 	if current_line_new_version then
 		local current_line_with_new_version = current_line:gsub(current_line_version, current_line_new_version) -- current line with the new package version
 		return current_line_with_new_version
@@ -62,7 +64,8 @@ end
 -- Get old version and new version from the current line
 Utils.get_package_line_info = function(line)
 	local packageName = Utils.get_package_name_from_current_line(line)
-	local new_version = Service.get_package_latest_version(packageName)
+	local co = coroutine.create(Service.get_package_latest_version)
+	local _, new_version = coroutine.resume(co, packageName)
 	local old_version = Utils.get_version_from_current_line(line)
 	return new_version, old_version
 end
@@ -147,13 +150,12 @@ Utils.get_selected_lines = function()
 end
 
 -- Multiple line update line
-
 Utils.one_line_update = function(line, line_number)
 	local package = Utils.get_package_name_from_current_line(line)
-	local _, new_version = coroutine.resume(Service.get_package_latest_version_coroutine, package)
-	print(new_version)
+	local co = coroutine.create(Service.get_package_latest_version)
+	local _, new_version = coroutine.resume(co, package)
 	local old_version = Utils.get_version_from_current_line(line)
-	local new_line = line:gsub(new_version, old_version)
+	local new_line = line:gsub(old_version, new_version)
 	Utils.set_text_in_current_line(new_line, line_number)
 	Config.virtual_text_option(0, icons.success, "success_highlight", line_number - 1, line:len())
 end
