@@ -2,6 +2,9 @@
 
 - A plugin for Neovim that allows you to check updates and versions of your node packages from within Neovim.
 
+![screenshot](img/screenshot_npc.png)
+
+
 ### Example
 
 - Show the latest version of any package from `registry.npmjs`.
