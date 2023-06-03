@@ -162,12 +162,21 @@ end
 
 -- Multiple update
 Utils.mutiple_update_lines_version = function()
-	local line_number, selected_lines = Utils.get_selected_lines()
-	if selected_lines then
-		for line in selected_lines:gmatch("[^\n]+") do
-			Utils.one_line_update(line, line_number)
-			line_number = line_number + 1
+	local is_package_json = Utils.is_package_json_file() -- is the current file package.json
+	if is_package_json then
+		local line_number, selected_lines = Utils.get_selected_lines()
+		if selected_lines then
+			for line in selected_lines:gmatch("[^\n]+") do
+				if not line:match(Config.package_version_pattern()) then
+					print(Messages.ERROR_MESSAGES.NO_PACKAGE .. "line: " .. line_number)
+				else
+					Utils.one_line_update(line, line_number)
+				end
+				line_number = line_number + 1
+			end
 		end
+	else
+		print(Messages.ERROR_MESSAGES.WRONG_FILE)
 	end
 end
 
