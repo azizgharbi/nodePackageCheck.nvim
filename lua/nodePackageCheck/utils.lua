@@ -13,8 +13,7 @@ local icons = {
 
 -- Get current file name
 Utils.get_current_file_name = function()
-	local file_name = vim.api.nvim_buf_get_name(0):match("^.+/(.+)$")
-	return file_name
+	return vim.api.nvim_buf_get_name(0):match("^.+/(.+)$")
 end
 -- End
 
@@ -26,15 +25,13 @@ end
 
 -- Get version from the current line
 Utils.get_version_from_current_line = function(line)
-	local version = line:match('"[%^]*([%d%.]+)"')
-	return version
+	return line:match('"[%^]*([%d%.]+)"')
 end
 -- End
 
 -- Get package name from the current line
 Utils.get_package_name_from_current_line = function(line)
-	local package_name = line:match("^([^:]+)"):gsub('"', "")
-	return package_name
+	return line:match("^([^:]+)"):gsub('"', "")
 end
 -- End
 
