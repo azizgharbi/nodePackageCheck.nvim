@@ -17,7 +17,8 @@ Clear_highlights = function()
 	vim.api.nvim_buf_clear_namespace(0, require("nodePackageCheck").Config.get_namespace_id(), 0, -1)
 end
 
-vim.cmd([[autocmd! TextChanged,TextChangedI, BufWritePost  * lua Clear_highlights()]])
+-- Undo and clear the current buffer
+vim.api.nvim_set_keymap("n", "u", ":undo<CR>:lua Clear_highlights()<CR>", { noremap = true, silent = true })
 
 vim.api.nvim_create_user_command("NPCUpdateLineVersion", function()
 	Clear_highlights()
