@@ -27,7 +27,9 @@
 # Unit Test
 
 - Using busted: [busted](https://lunarmodules.github.io/busted/).
-- Inside `lua folder` run `busted .`
+```bash 
+lua /path run busted
+```
 
 # Contributing
 
