@@ -17,8 +17,9 @@
 
 #### Packer
 
-- `use("azizgharbi/nodePackageCheck.nvim")`
-
+```bash
+use("azizgharbi/nodePackageCheck.nvim")
+```
 #### Available commands
 
 - `:NPCUpdateLineVersion`: Run the command on the line of the package whose version you wish to update.
